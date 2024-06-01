@@ -1,0 +1,19 @@
+{
+    "name": "auroralumina/view",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AuroraLumina\\View\\": "src/View"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mythirst"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.3"
+    }
+}
