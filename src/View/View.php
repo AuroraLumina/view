@@ -9,23 +9,22 @@ use AuroraLumina\View\ViewConfiguration;
  * Class View
  * Represents a view renderer.
  */
-class View
+class View extends ViewTemplate
 {
     /**
-     * @var ViewConfiguration $configuration The configuration for view templates.
-     */
-    private ViewConfiguration $configuration;
-
-    /**
-     * View constructor.
-     * 
-     * @param ViewConfiguration $configuration The configuration for view templates.
+     * Constructs a new View object.
+     *
+     * Initializes the View with the provided configuration.
+     * Sets the compile location and template paths based on the configuration.
+     *
+     * @param ViewConfiguration $configuration The configuration for the view.
      */
     public function __construct(ViewConfiguration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->setCompileLocation("cache/", false);
+        $this->setPaths($configuration->getTemplatePaths());
     }
-    
+
     /**
      * Render a view.
      * 
@@ -33,17 +32,18 @@ class View
      * @return string The rendered content of the view.
      * @throws Exception If the template file is not found.
      */
-    protected function renderView(string $view): string
+    protected function renderView(string $view, array $data): string
     {
-        $viewPath = $this->configuration->getTemplatePath() . $view;
+        $this->defaultVariables();
 
-        if (!file_exists($viewPath))
+        $this->load($view);
+
+        foreach ($data as $key => $value)
         {
-            throw new Exception('Template not found.');
+            $this->assign($key, $value);
         }
 
-        $content = file_get_contents($viewPath);
-        return $content;
+        return $this->get();
     }
 
     /**
@@ -53,8 +53,8 @@ class View
      * @return string The rendered content of the view.
      * @throws Exception If the template file is not found.
      */
-    public function render(string $view): string
+    public function view(string $view, array $data = []): string
     {
-        return $this->renderView($view);
+        return $this->renderView($view, $data);
     }
 }

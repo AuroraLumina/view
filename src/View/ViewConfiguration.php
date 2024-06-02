@@ -9,27 +9,27 @@ namespace AuroraLumina\View;
 class ViewConfiguration
 {
     /**
-     * @var string $path The path to the directory containing view templates.
+     * @var array<string> $paths The paths to the directory containing view templates.
      */
-    private string $path;
+    private array $paths;
 
     /**
      * ViewConfiguration constructor.
      * 
-     * @param string $path The path to the directory containing view templates.
+     * @param string $paths The paths to the directory containing view templates.
      */
-    public function __construct(string $path)
+    public function __construct(array $paths)
     {
-        $this->path = rtrim($path, '/') . '/';
+        $this->paths = $paths;
     }
     
     /**
      * Get the path to the directory containing view templates.
      * 
-     * @return string The path to the directory containing view templates.
+     * @return array<string> The path to the directory containing view templates.
      */
-    public function getTemplatePath(): string
+    public function getTemplatePaths(): array
     {
-        return $this->path;
+        return $this->paths;
     }
 }
