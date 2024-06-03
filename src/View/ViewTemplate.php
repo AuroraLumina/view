@@ -267,7 +267,7 @@ abstract class ViewTemplate
      * @return void
      * @throws Exception If the filename is empty.
      */
-    public function render(): void
+    public function includeRender(): void
     {
         if ($this->filename === null)
         {
@@ -284,7 +284,7 @@ abstract class ViewTemplate
     public function get(): string
     {
         ob_start();
-        $this->render();
+        $this->includeRender();
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
