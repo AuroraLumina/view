@@ -29,6 +29,19 @@ class View extends ViewTemplate
      * Render a view.
      * 
      * @param string $view The name of the view to render.
+     * @param array $data Optional data to pass to the view.
+     * @return string The rendered content of the view.
+     * @throws Exception If the template file is not found.
+     */
+    public function render(string $view, array $data = []): string
+    {
+        return $this->renderView($view, $data);
+    }
+
+    /**
+     * Render a view.
+     * 
+     * @param string $view The name of the view to render.
      * @return string The rendered content of the view.
      * @throws Exception If the template file is not found.
      */
@@ -44,17 +57,5 @@ class View extends ViewTemplate
         }
 
         return $this->get();
-    }
-
-    /**
-     * Render a view.
-     * 
-     * @param string $view The name of the view to render.
-     * @return string The rendered content of the view.
-     * @throws Exception If the template file is not found.
-     */
-    public function view(string $view, array $data = []): string
-    {
-        return $this->renderView($view, $data);
     }
 }
