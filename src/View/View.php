@@ -21,8 +21,8 @@ class View extends ViewTemplate
      */
     public function __construct(ViewConfiguration $configuration)
     {
-        $this->setCompileLocation("cache/", false);
         $this->setPaths($configuration->getTemplatePaths());
+        $this->setCompileLocation($configuration->getCompileLocation(), $configuration->isCompileAbsolute());
     }
 
     /**
