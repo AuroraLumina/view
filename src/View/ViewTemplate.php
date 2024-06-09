@@ -3,6 +3,7 @@
 namespace AuroraLumina\View;
 
 use Exception;
+use AuroraLumina\View\Processors\TemplateProcessor;
 
 abstract class ViewTemplate
 {
@@ -68,6 +69,23 @@ abstract class ViewTemplate
      * @var array
      */
     protected array $vars = [];
+
+    /**
+     * The template compiler instance.
+     * 
+     * @var ViewCompiler
+     */
+    private ViewCompiler $compiler;
+
+    /**
+     * Constructor.
+     * 
+     * @param TemplateProcessor $processor The template processor instance.
+     */
+    public function __construct(TemplateProcessor $processor)
+    {
+        $this->compiler = new ViewCompiler($processor);
+    }
 
     /**
      * Set default variables.
@@ -158,8 +176,7 @@ abstract class ViewTemplate
      */
     protected function compile(string $template, string $out): bool
     {
-        $compile = new ViewCompiler;
-        return $compile->compile($template, $out, function($file) {
+        return $this->compiler->compile($template, $out, function($file) {
             return $this->findPath($file);
         }, $this->nocache);
     }

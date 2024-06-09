@@ -4,6 +4,7 @@ namespace AuroraLumina\View;
 
 use Exception;
 use AuroraLumina\View\ViewConfiguration;
+use AuroraLumina\View\Processors\TemplateProcessor;
 
 /**
  * Class View
@@ -23,6 +24,7 @@ class View extends ViewTemplate
     {
         $this->setPaths($configuration->getTemplatePaths());
         $this->setCompileLocation($configuration->getCompileLocation(), $configuration->isCompileAbsolute());
+        parent::__construct(new TemplateProcessor());
     }
 
     /**
