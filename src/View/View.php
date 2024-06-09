@@ -2,7 +2,6 @@
 
 namespace AuroraLumina\View;
 
-use AuroraLumina\View\Parsers\TemplateParser;
 use Exception;
 use AuroraLumina\View\ViewConfiguration;
 use AuroraLumina\View\Processors\TemplateProcessor;

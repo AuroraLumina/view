@@ -3,7 +3,6 @@
 namespace AuroraLumina\View;
 
 use Exception;
-use AuroraLumina\View\Parsers\TemplateParser;
 use AuroraLumina\View\Processors\TemplateProcessor;
 
 abstract class ViewTemplate
