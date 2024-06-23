@@ -13,12 +13,17 @@ class FileUtils
 	public static function loadContents(string $filename): string
 	{
 		$contents = file_get_contents($filename);
+
+		if ($contents === false)
+		{
+			return '';
+		}
 		
-		if ($contents !== false && substr($contents, 0, 3) === "\xEF\xBB\xBF")
+		if (substr($contents, 0, 3) === "\xEF\xBB\xBF")
 		{
 			return substr($contents, 3);
 		}
-		
+
 		return $contents;
 	}
 
@@ -31,7 +36,8 @@ class FileUtils
 	public static function createOutputDirectory(string $output_filename): void
 	{
 		$output_directory = dirname($output_filename);
-		if (!file_exists($output_directory))
+		
+		if (!is_dir($output_directory))
 		{
 			mkdir($output_directory, 0777, true);
 		}
@@ -46,12 +52,8 @@ class FileUtils
      */
 	public static function writeToFile(string $output_filename, string $contents): bool
 	{
-		if ($file = @fopen($output_filename, "w"))
-		{
-			fwrite($file, $contents);
-			fclose($file);
-			return true;
-		}
-		return false;
+		$result = file_put_contents($output_filename, $contents, LOCK_EX);
+
+		return $result !== false;
 	}
 }

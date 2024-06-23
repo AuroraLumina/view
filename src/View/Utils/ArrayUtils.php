@@ -46,7 +46,9 @@ class ArrayUtils
     {
         $variablesAssoc = array_flip($variables);
         $objectsAssoc = array_flip($objects);
-        if (isset($variable) &&!isset($variablesAssoc[$variable]) &&!isset($objectsAssoc[$variable])) {
+    
+        if ($variable !== null && !isset($variablesAssoc[$variable]) && !isset($objectsAssoc[$variable]))
+        {
             $variables[] = $variable;
         }
     }
