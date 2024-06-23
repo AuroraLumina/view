@@ -243,27 +243,60 @@ abstract class ViewTemplate
     /**
      * Assign variables to the template.
      *
-     * @param string|array $key The key or array of key-value pairs.
-     * @param mixed $value The value if a single key is provided.
+     * @param string|array $key   The key or array of key-value pairs.
+     * @param mixed        $value The value if a single key is provided.
      * @return void
      */
     protected function assign(string|array $key, mixed $value = ''): void
     {
         if (is_array($key))
         {
-            $prefix = $value ? $value . "_" : '';
-            foreach ($key as $inKey => $inValue)
-            {
-                $this->vars[$prefix . $inKey] = $inValue;
-            }
+            $this->assignArray($key, $value);
         }
         else
         {
-            $concat = str_starts_with($key, '.');
-            $key = $concat ? substr($key, 1) : $key;
-            $this->vars[$key] = ($concat && isset($this->vars[$key])) ?
-                (is_array($value) ? array_merge($this->vars[$key], $value) :
-                $this->vars[$key] . $value) : $value;
+            $this->assignSingle($key, $value);
+        }
+    }
+
+    /**
+     * Assign an array of key-value pairs to the template.
+     *
+     * @param array        $key    The array of key-value pairs.
+     * @param string       $prefix Optional prefix for keys.
+     * @return void
+     */
+    protected function assignArray(array $key, string $prefix = ''): void
+    {
+        $prefix = $prefix ? $prefix . "_" : '';
+
+        foreach ($key as $inKey => $inValue)
+        {
+            $this->vars[$prefix . $inKey] = $inValue;
+        }
+    }
+
+    /**
+     * Assign a single key-value pair to the template.
+     *
+     * @param string       $key   The key to assign.
+     * @param mixed        $value The value to assign.
+     * @return void
+     */
+    protected function assignSingle(string $key, mixed $value): void
+    {
+        $isConcatenated = str_starts_with($key, '.');
+        $originalKey = $isConcatenated ? substr($key, 1) : $key;
+
+        if ($isConcatenated && isset($this->vars[$originalKey]))
+        {
+            $this->vars[$originalKey] = is_array($value)
+                ? array_merge($this->vars[$originalKey], $value)
+                : $this->vars[$originalKey] . $value;
+        }
+        else
+        {
+            $this->vars[$originalKey] = $value;
         }
     }
 
@@ -301,9 +334,10 @@ abstract class ViewTemplate
     public function get(): string
     {
         ob_start();
+
         $this->includeRender();
-        $content = ob_get_contents();
-        ob_end_clean();
+
+        $content = ob_get_clean();
         return $content;
     }
 }
