@@ -204,13 +204,16 @@ class TemplateProcessor
 	 */
 	private function buildIndexString(string $index): string
 	{
-		if ($index[0] === '$')
+		if (strpos($index, '$') === 0)
 		{
 			return "[" . $this->getVariable($index) . "]";
-		} else {
+		}
+		else
+		{
 			return "['" . $index . "']";
 		}
 	}
+
 
 	/**
 	 * Processes a composite variable string.
@@ -275,15 +278,31 @@ class TemplateProcessor
 	public function splitExp(string $exp): string
 	{
 		$code = CodeUtils::prepareCode($exp);
+
 		$tokens = token_get_all($code);
+
 		[$objects, $variables] = $this->extractObjectsAndVariables($tokens);
+
 		$this->processGlobalVariables($objects, $variables);
+
 		ArrayUtils::sortVariables($variables);
 
-		foreach ($variables as $var) 
-		{
-			if ($var != '$this') 
-			{
+		$exp = $this->replaceVariables($exp, $variables);
+
+		return $exp;
+	}
+
+	/**
+	 * Replace variables in the expression with their values.
+	 *
+	 * @param string $exp The expression containing variables.
+	 * @param array $variables The array of variables to replace.
+	 * @return string The expression with variables replaced.
+	 */
+	private function replaceVariables(string $exp, array $variables): string
+	{
+		foreach ($variables as $var) {
+			if ($var != '$this') {
 				$exp = str_replace($var, $this->getVariable($var), $exp);
 			}
 		}

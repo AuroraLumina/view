@@ -384,7 +384,7 @@ class TemplateParser
 
 		if (strstr($value, "|") !== false)
 		{
-			list($left, $right) = explode("|", $value);
+			[$left, $right] = explode("|", $value);
 			$left = $this->processor->splitExp($left);
 
 			switch ($right)
